@@ -1,0 +1,95 @@
+/* Infrastructure.css */
+
+section {
+  padding: 60px 20px;
+  background-color: #15255b; /* Dark blue background */
+  text-align: center;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
+h2 {
+  font-size: 2.5rem;
+  color: #ffffff;
+  margin-bottom: 40px;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+}
+
+/* Grid container for cards - 2 columns */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px 50px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Card styling */
+.card-1 {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* align everything on left side */
+  padding: 20px 35px;
+  border-radius: 50px; /* pill shape */
+  background-color: #0bb3ff; /* bright blue */
+  box-shadow: 0 4px 15px rgba(11, 179, 255, 0.7);
+  cursor: default;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  color: white;
+}
+
+/* Hover effect */
+.card-1:hover {
+  background-color: #33c1ff;
+  box-shadow: 0 6px 20px rgba(11, 179, 255, 0.9);
+}
+
+/* Icon styling */
+.card-1 .icon {
+  font-size: 2.8rem;
+  margin-right: 25px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Title and description container */
+.card-1-content {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  flex-grow: 1;
+}
+
+/* Title */
+.card-1-content h3 {
+  font-size: 1.7rem;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  letter-spacing: 0.05em;
+}
+
+/* Description paragraph */
+.card-1-content p {
+  font-size: 1rem;
+  margin: 0;
+  line-height: 1.4;
+  color: #e6f0ff;
+  word-wrap: break-word;
+  max-width: 320px;
+}
+
+/* Responsive handling */
+@media (max-width: 700px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .card-1-content p {
+    max-width: 100%; /* allow full width on smaller screens */
+  }
+}

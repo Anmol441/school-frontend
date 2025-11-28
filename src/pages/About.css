@@ -1,0 +1,91 @@
+/* About.css */
+
+.about-container {
+  padding: 20px;
+  background-color: #f7f7f7;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.about-container h1 {
+  padding-top: 10px;
+  color: blueviolet; /* Matches the blue/purple heading */
+  margin-bottom: 20px;
+}
+
+.about-intro {
+  font-size: 16px;
+  margin-bottom: 40px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333;
+}
+
+.about-cards {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+/* Custom styles for cards */
+.card {
+  width: 18rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  background: linear-gradient( #4682DCE6 , #8a2be2E6 ); /* gradient blue to purple with some transparency for effect */
+  color: #000;
+  height: 400px;
+  border: 1px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* Card header styling */
+.card-header {
+   
+  color: white !important;
+  font-weight: 500;
+  border-radius: 6px;
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+  padding-top:  5px;;
+ 
+}
+
+/* Override to apply different background colors on each card header */
+.card:nth-child(1) .card-header {
+  background-color: #6a0dad !important; /* Our Philosophy */
+}
+
+.card:nth-child(2) .card-header {
+  background-color: #2a00b7 !important; /* Our Vision */
+}
+
+.card:nth-child(3) .card-header {
+  background-color: #bf04ee !important; /* Principal's Message */
+}
+
+.card-body {
+  padding: 1rem 1rem 2rem;
+  text-align: center;
+  
+}
+
+.card-title {
+ 
+  margin-bottom: 8px;
+  font-weight: 400;
+  color: #222;
+}
+
+.card-text {
+  font-weight: 700;
+  font-size: 1.1rem;
+  line-height: 1.9;
+  margin-top: 10px;
+  color: #222;
+} 
