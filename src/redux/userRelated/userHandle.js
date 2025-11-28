@@ -31,24 +31,27 @@ export const loginUser = (fields, role) => async (dispatch) => {
 };
 
 export const registerUser = (fields, role) => async (dispatch) => {
-    dispatch(authRequest());
+  dispatch(authRequest());
 
-    try {
-        const result = await axios.post(`${process.env.REACT_APP_BASE_URL}/${role}Reg`, fields, {
-            headers: { 'Content-Type': 'application/json' },
-        });
-        if (result.data.schoolName) {
-            dispatch(authSuccess(result.data));
-        }
-        else if (result.data.school) {
-            dispatch(stuffAdded());
-        }
-        else {
-            dispatch(authFailed(result.data.message));
-        }
-    } catch (error) {
-        dispatch(authError(error));
+  try {
+    const res = await axios.post(
+      `${process.env.REACT_APP_BASE_URL}/${role}Reg`,
+      fields,
+      { headers: { "Content-Type": "application/json" } }
+    );
+
+    const data = res.data;
+
+    // Expect backend to return { success: true, student: {...}, school: ... }
+    if (data && data.success === true) {
+      // For register flows (Student/Teacher), use stuffAdded to indicate created
+      dispatch(stuffAdded(data.student || data)); // payload = created resource
+    } else {
+      dispatch(authFailed(data.message || "Registration failed"));
     }
+  } catch (error) {
+    dispatch(authError(error.message || "Network error"));
+  }
 };
 
 export const logoutUser = () => (dispatch) => {
