@@ -79,7 +79,13 @@ const userSlice = createSlice({
         },
         toggleDarkMode: (state) => {
             state.darkMode = !state.darkMode;
-        }
+        },
+        stuffAdded: (state, action) => {
+  state.status = "added";
+  state.response = null;
+  state.error = null;
+  state.tempDetails = action.payload || null; // store created object if needed
+}
     },
 });
 
