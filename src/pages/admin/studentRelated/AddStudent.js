@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { registerUser } from '../../../redux/userRelated/userHandle';
-import Popup from '../../../components/Popup';
-import { underControl } from '../../../redux/userRelated/userSlice';
-import { getAllSclasses } from '../../../redux/sclassRelated/sclassHandle';
-import { CircularProgress } from '@mui/material';
+// src/pages/admin/AddStudent.jsx
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "../../../redux/userRelated/userHandle";
+import Popup from "../../../components/Popup";
+import { underControl } from "../../../redux/userRelated/userSlice";
+import { getAllSclasses } from "../../../redux/sclassRelated/sclassHandle";
+import { CircularProgress } from "@mui/material";
 
 const AddStudent = ({ situation }) => {
   const dispatch = useDispatch();
@@ -16,30 +17,29 @@ const AddStudent = ({ situation }) => {
   const { status, currentUser, response, error } = userState;
   const { sclassesList } = useSelector((state) => state.sclass);
 
-  const [name, setName] = useState('');
-  const [rollNum, setRollNum] = useState('');
-  const [password, setPassword] = useState('');
-  const [className, setClassName] = useState('');
-  const [sclassName, setSclassName] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");                 // NEW
+  const [rollNum, setRollNum] = useState("");
+  const [password, setPassword] = useState("");
+  const [className, setClassName] = useState("");
+  const [sclassName, setSclassName] = useState("");
 
   const [showPopup, setShowPopup] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [loader, setLoader] = useState(false);
 
-  const adminID = currentUser?._id; // make sure adminID is defined
-  const role = 'Student';
+  const adminID = currentUser?._id; // safe access
+  const role = "Student";
   const attendance = [];
 
-  // Fetch classes only if adminID exists
+  // fetch classes only when adminID available
   useEffect(() => {
-    if (adminID) {
-      dispatch(getAllSclasses(adminID, 'Sclass'));
-    }
+    if (adminID) dispatch(getAllSclasses(adminID, "Sclass"));
   }, [adminID, dispatch]);
 
-  // If we are in "Class" situation, preselect the class
+  // preselect class if route supplies id (situation === "Class")
   useEffect(() => {
-    if (situation === 'Class' && params.id) {
+    if (situation === "Class" && params.id) {
       setSclassName(params.id);
       const selected = sclassesList.find((c) => c._id === params.id);
       if (selected) setClassName(selected.sclassName);
@@ -47,9 +47,9 @@ const AddStudent = ({ situation }) => {
   }, [params.id, situation, sclassesList]);
 
   const changeHandler = (event) => {
-    if (event.target.value === 'Select Class') {
-      setClassName('Select Class');
-      setSclassName('');
+    if (event.target.value === "Select Class") {
+      setClassName("Select Class");
+      setSclassName("");
     } else {
       const selectedClass = sclassesList.find(
         (classItem) => classItem.sclassName === event.target.value
@@ -61,41 +61,58 @@ const AddStudent = ({ situation }) => {
     }
   };
 
-  const fields = { name, rollNum, password, sclassName, adminID, role, attendance };
+  // build payload ensuring types
+  const buildFields = () => ({
+    name: name.trim(),
+    email: email.trim(),
+    rollNum: Number(rollNum),
+    password,
+    sclassName,
+    adminID,
+    role,
+    attendance,
+  });
 
   const submitHandler = (event) => {
     event.preventDefault();
 
+    // client-side validations
     if (!adminID) {
-      setMessage('Admin not loaded yet. Please try again.');
+      setMessage("Admin not loaded yet. Try again in a moment.");
       setShowPopup(true);
       return;
     }
-
+    if (!name || !email || !rollNum || !password) {
+      setMessage("Please fill all fields (name, email, roll number, password).");
+      setShowPopup(true);
+      return;
+    }
     if (!sclassName) {
-      setMessage('Please select a class');
+      setMessage("Please select a class");
       setShowPopup(true);
       return;
     }
 
     setLoader(true);
-    dispatch(registerUser(fields, role));
+    dispatch(registerUser(buildFields(), role));
   };
 
   useEffect(() => {
-    if (status === 'added') {
+    // respond to register status from redux
+    if (status === "added") {
+      setLoader(false);
       dispatch(underControl());
       navigate(-1);
-    } else if (status === 'failed') {
-      setMessage(response || 'Failed to add student');
+    } else if (status === "failed") {
+      setMessage(response || "Failed to add student");
       setShowPopup(true);
       setLoader(false);
-    } else if (status === 'error') {
-      setMessage('Network error. Please try again.');
+    } else if (status === "error") {
+      setMessage(error || "Network error");
       setShowPopup(true);
       setLoader(false);
     }
-  }, [status, navigate, response, dispatch]);
+  }, [status, navigate, response, error, dispatch]);
 
   return (
     <>
@@ -110,11 +127,20 @@ const AddStudent = ({ situation }) => {
             placeholder="Enter student's name..."
             value={name}
             onChange={(e) => setName(e.target.value)}
-            autoComplete="name"
             required
           />
 
-          {situation === 'Student' && (
+          <label>Email</label>
+          <input
+            className="registerInput"
+            type="email"
+            placeholder="Enter student's email..."
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          {situation === "Student" && (
             <>
               <label>Class</label>
               <select className="registerInput" value={className} onChange={changeHandler} required>
@@ -145,12 +171,11 @@ const AddStudent = ({ situation }) => {
             placeholder="Enter student's password..."
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            autoComplete="new-password"
             required
           />
 
           <button className="registerButton" type="submit" disabled={loader}>
-            {loader ? <CircularProgress size={24} color="inherit" /> : 'Add'}
+            {loader ? <CircularProgress size={24} color="inherit" /> : "Add"}
           </button>
         </form>
       </div>
