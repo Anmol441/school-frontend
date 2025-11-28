@@ -11,7 +11,7 @@ const AdminComplain = () => {
 
   const fetchComplains = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/complain/${schoolId}`);
+      const response = await axios.get(` https://school-backend-4gsg.onrender.com/api/complain/${schoolId}`);
       if (response.data.message === "No complains found") {
         setComplains([]);
       } else {

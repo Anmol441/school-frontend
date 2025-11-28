@@ -4,7 +4,7 @@ const AdminContact = () => {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/school/contact/all")
+    fetch(" https://school-backend-4gsg.onrender.com/school/contact/all")
       .then(res => res.json())
       .then(data => {
         if (data.success) setMessages(data.data);
